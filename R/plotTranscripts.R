@@ -165,6 +165,7 @@ plotTranscripts <- function(chrom, chromstart = NULL, chromend = NULL,
                             boxHeight = unit(2, "mm"), spaceWidth = 0.02,
                             spaceHeight = 0.3, limitLabel = TRUE,
                             transcriptHighlights = NULL,
+                            transcriptFilter = NULL,
                             fontsize = 8,
                             labels = "transcript", stroke = 0.1, bg = NA,
                             x = NULL, y = NULL, width = NULL,
@@ -287,6 +288,12 @@ plotTranscripts <- function(chrom, chromstart = NULL, chromend = NULL,
     data <- transcriptsInternal$data
     ## Get transcript lengths
     data$length <- data$TXEND - data$TXSTART
+
+    ## filter down to only a select set of transcripts
+    if (!is.null(transcriptsInternal$transcriptFilter)) {
+        data <- data[which(data[,"TXNAME"] %in%
+                     transcriptsInternal$transcriptFilter),]
+    }
     
     # =========================================================================
     # COLORS AND HIGHLIGHTS
